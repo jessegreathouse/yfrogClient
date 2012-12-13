@@ -52,7 +52,7 @@ class YfrogClient
         $this->username = $username;
         $this->password = $password;
         $this->key = $key;
-        if (null !== $request) {
+        if (null === $request) {
             $request = new YfrogRequest();
         }
         $this->request = $request;
