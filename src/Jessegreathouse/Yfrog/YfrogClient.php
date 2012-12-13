@@ -146,7 +146,7 @@ class YfrogClient
     }
 
 
-    protected function $loadRequest()
+    protected function loadRequest()
     {
         return array(
             'username' => $this->username,
