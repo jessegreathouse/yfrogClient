@@ -166,9 +166,9 @@ class YfrogClient
         $yfrog = new Yfrog;
         $yfrog->setClient($this);
 
-        if (!is_a($this->request , 'YfrogRequest')) {
+        if (!is_a($this->request , 'Jessegreathouse\\Yfrog\\YfrogRequest')) {
             $yfrog->setStat(false)
-                  ->setCode(YFROG_ERROR_INVALID_REQUEST)
+                  ->setCode(self::YFROG_ERROR_INVALID_REQUEST)
                   ->setMsg('Invalid request object')
                   ;
             return $yfrog;
@@ -178,7 +178,7 @@ class YfrogClient
 
         if (!$handle) {
             $yfrog->setStat(false)
-                  ->setCode(YFROG_ERROR_IO_ERROR)
+                  ->setCode(self::YFROG_ERROR_IO_ERROR)
                   ->setMsg('Unable to initialize CURL')
                   ;
             return $yfrog;
@@ -191,7 +191,7 @@ class YfrogClient
         curl_setopt($handle, CURLOPT_TIMEOUT, $timeout);
         curl_setopt($handle, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($handle, CURLOPT_FOLLOWLOCATION, 1);
-        curl_setopt($handle, CURLOPT_POSTFIELDS, $this->loadRequest($request));
+        curl_setopt($handle, CURLOPT_POSTFIELDS, $this->loadRequest($this->request));
 
         $response = curl_exec($handle);
 
@@ -199,7 +199,7 @@ class YfrogClient
         if ($error)
         {
             $yfrog->setStat(false)
-                  ->setCode(YFROG_ERROR_IO_ERROR)
+                  ->setCode(self::YFROG_ERROR_IO_ERROR)
                   ->setMsg(curl_error($handle) . ' [' . $error . ']')
                   ;
             curl_close($handle);
@@ -211,7 +211,7 @@ class YfrogClient
         $xml = @simplexml_load_string($response);
         if (!$xml) {
             $yfrog->setStat(false)
-                  ->setCode(YFROG_ERROR_MALFORMED_XML)
+                  ->setCode(self::YFROG_ERROR_MALFORMED_XML)
                   ->setMsg('Malformed XML is received as response')
                   ;
             return $yfrog;
@@ -233,7 +233,7 @@ class YfrogClient
             return $yfrog;
         } else {
             $yfrog->setStat(false)
-                  ->setCode(YFROG_ERROR_MALFORMED_XML)
+                  ->setCode(self::YFROG_ERROR_MALFORMED_XML)
                   ->setMsg('Unexpected XML is received as response')
                   ;
         }
